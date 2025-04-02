@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -47,28 +46,50 @@ export default function SignupForm() {
 
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+  
+    try {
+      const response = await fetch('http://localhost:3000/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName: data.name, email: data.email, password: data.password, confirmPassword: data.confirmPassword }),
+      });
+  
+      const result = await response.json();
+  
+      if (response.status === 400 && result.message === "User already exists") {
+        throw new Error("User with this email already exists");
+      }
+  
+      if (!response.ok) {
+        throw new Error(result.message || "Something went wrong");
+      }
+  
+      // ✅ Store only the user ID in localStorage
+      localStorage.setItem('userId', result.userId);
+  
       toast({
         title: "Account created",
         description: "Welcome to ClaimAI Vista! Your account has been created successfully.",
       });
+  
       navigate('/dashboard');
-    }, 1500);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
-
+  
   const formVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
       opacity: 1, 
       y: 0,
-      transition: { 
-        type: "spring",
-        stiffness: 100,
-        damping: 15
-      }
+      transition: { type: "spring", stiffness: 100, damping: 15 }
     }
   };
 
@@ -96,12 +117,7 @@ export default function SignupForm() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="John Doe" 
-                        {...field} 
-                        disabled={isLoading}
-                        className="bg-white/50 dark:bg-gray-950/50"
-                      />
+                      <Input {...field} disabled={isLoading} className="bg-white/50 dark:bg-gray-950/50" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -115,13 +131,7 @@ export default function SignupForm() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="email" 
-                        placeholder="name@example.com" 
-                        {...field} 
-                        disabled={isLoading}
-                        className="bg-white/50 dark:bg-gray-950/50"
-                      />
+                      <Input type="email" {...field} disabled={isLoading} className="bg-white/50 dark:bg-gray-950/50" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -138,34 +148,20 @@ export default function SignupForm() {
                       <FormControl>
                         <Input 
                           type={showPassword ? "text" : "password"} 
-                          placeholder="••••••••"
                           {...field} 
                           disabled={isLoading}
                           className="bg-white/50 dark:bg-gray-950/50"
                         />
                       </FormControl>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOffIcon className="h-4 w-4" />
-                        ) : (
-                          <EyeIcon className="h-4 w-4" />
-                        )}
-                        <span className="sr-only">
-                          {showPassword ? "Hide password" : "Show password"}
-                        </span>
+                      <Button type="button" variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
                       </Button>
                     </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="confirmPassword"
@@ -176,27 +172,13 @@ export default function SignupForm() {
                       <FormControl>
                         <Input 
                           type={showConfirmPassword ? "text" : "password"} 
-                          placeholder="••••••••"
                           {...field} 
                           disabled={isLoading}
                           className="bg-white/50 dark:bg-gray-950/50"
                         />
                       </FormControl>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      >
-                        {showConfirmPassword ? (
-                          <EyeOffIcon className="h-4 w-4" />
-                        ) : (
-                          <EyeIcon className="h-4 w-4" />
-                        )}
-                        <span className="sr-only">
-                          {showConfirmPassword ? "Hide password" : "Show password"}
-                        </span>
+                      <Button type="button" variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                        {showConfirmPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
                       </Button>
                     </div>
                     <FormMessage />
@@ -204,11 +186,7 @@ export default function SignupForm() {
                 )}
               />
 
-              <Button
-                type="submit"
-                className="w-full gradient-blue"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full gradient-blue" disabled={isLoading}>
                 {isLoading ? <LoadingSpinner size="sm" color="white" /> : "Create Account"}
               </Button>
             </form>

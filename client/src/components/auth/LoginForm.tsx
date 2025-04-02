@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -38,15 +37,41 @@ export default function LoginForm() {
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.status === 401) {
+        throw new Error('Invalid email or password');
+      }
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Something went wrong');
+      }
+
+      // ✅ Save user ID in localStorage
+      localStorage.setItem('userId', result.userId);
+
       toast({
         title: "Login successful",
         description: "Welcome back to ClaimAI Vista!",
       });
+
       navigate('/dashboard');
-    }, 1500);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const formVariants = {
