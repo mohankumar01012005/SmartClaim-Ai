@@ -11,7 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import Claims from "./pages/Claims";
 import ClaimDetail from "./pages/ClaimDetail";
 import NewClaim from "./pages/NewClaim";
-import Profile from "./pages/Profile";
+
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,7 +30,7 @@ const App = () => (
           <Route path="/claims" element={<Claims />} />
           <Route path="/claims/new" element={<NewClaim />} />
           <Route path="/claims/:id" element={<ClaimDetail />} />
-          <Route path="/profile" element={<Profile />} />
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
