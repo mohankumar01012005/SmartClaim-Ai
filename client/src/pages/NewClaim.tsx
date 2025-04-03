@@ -62,7 +62,7 @@ export default function NewClaim() {
     });
 
     try {
-      const response = await axios.post(`http://localhost:3000/${userId}/add-claim`, {
+      const response = await axios.post(`https://smartclaim-ai-backend.vercel.app/${userId}/add-claim`, {
         image: urlData.publicUrl,
       });
 
@@ -70,7 +70,7 @@ export default function NewClaim() {
         toast({
           title: "Claim Added",
           description: "Your claim is added. Redirecting to your dashboard...",
-          variant: "success",
+          variant: "default",
         });
 
         setTimeout(() => {

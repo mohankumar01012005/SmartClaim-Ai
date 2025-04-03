@@ -5,7 +5,7 @@ import { FileUp, X, File, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useToast } from "../../hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import LoadingSpinner from '../UI/LoadingSpinner';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 interface FileUploadProps {
   onUploadComplete: (fileData: FileData) => void;
@@ -132,6 +132,7 @@ export default function FileUpload({
           
           // Create a fake URL for the file
           const fileData: FileData = {
+            file: file,
             name: file.name,
             size: file.size,
             type: file.type,
