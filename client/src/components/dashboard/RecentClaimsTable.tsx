@@ -27,7 +27,7 @@ export default function RecentClaimsTable() {
       if (!userId) return;
 
       try {
-        const response = await axios.get(`http://localhost:3000/${userId}/claims`);
+        const response = await axios.get(`https://smartclaim-ai-backend.vercel.app/${userId}/claims`);
         console.log("API Response: ", response.data);
 
         // Extract claims correctly from API response
@@ -96,12 +96,7 @@ export default function RecentClaimsTable() {
       <Card className="glass-card border-0 overflow-hidden">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-xl">Recent Claims</CardTitle>
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/claims" className="flex items-center">
-              View All
-              <ChevronRight className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
+        
         </CardHeader>
         <CardContent>
           {/* Total Claims & Total Amount */}
@@ -131,11 +126,7 @@ export default function RecentClaimsTable() {
                     <TableCell>{claim.date}</TableCell>
                     <TableCell>₹{claim.amount.toFixed(2)}</TableCell>
                     <TableCell>{getStatusBadge(claim.status)}</TableCell>
-                    <TableCell>
-                      <Button asChild variant="ghost" size="sm">
-                        <Link to={`/claims/${claim.claimNumber}`}>View</Link>
-                      </Button>
-                    </TableCell>
+                   
                   </motion.tr>
                 ))
               ) : (

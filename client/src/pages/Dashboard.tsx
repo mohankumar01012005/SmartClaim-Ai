@@ -12,10 +12,7 @@ import { Link } from 'react-router-dom';
 export default function Dashboard() {
   // Mock data
   const stats = [
-    { title: 'Total Claims', value: '24', icon: FileCheck, change: { value: '12%', increased: true }, delay: 0 },
-    { title: 'Pending Claims', value: '7', icon: Clock, change: { value: '5%', increased: false }, delay: 1 },
-    { title: 'Rejected Claims', value: '3', icon: AlertCircle, change: { value: '2%', increased: false }, delay: 2 },
-    { title: 'Total Amount', value: '$12,450', icon: DollarSign, change: { value: '18%', increased: true }, delay: 3 },
+   
   ];
 
   const areaChartData = [
