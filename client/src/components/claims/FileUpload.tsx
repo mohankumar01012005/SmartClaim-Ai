@@ -14,6 +14,7 @@ interface FileUploadProps {
 }
 
 export interface FileData {
+  file: any;
   name: string;
   size: number;
   type: string;
